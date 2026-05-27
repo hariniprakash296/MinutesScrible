@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",
+    "@tailwindcss/vite": "^4.3.0",
     "exceljs": "^4.4.0",
     "mermaid": "^11.15.0",
     "react": "^19.2.6",
