@@ -17,6 +17,13 @@
 3. Update the `## Current State` table in this file.
 4. Update `## Next Steps` in this file to reflect what remains.
 
+**When the user types `/issues`:**
+1. Read `issues.md` in full.
+2. Check whether any logged issue is relevant to the current task (same file, same package, same tool).
+3. If a relevant issue exists, flag it with the issue number and its "Test next time" note before writing any code.
+4. After completing the work, append any new issue encountered to `issues.md` using the same format (symptom → root cause → fix → test next time).
+5. Keep the "What to test before every release" checklist at the bottom of `issues.md` up to date.
+
 ---
 
 ## Current State
