@@ -5,7 +5,7 @@
 **Local path:** `C:\Users\harin\Documents\MeetAssist`
 **PRD:** `PRD_MeetAssist.md` (single source of truth — read it before touching anything)
 **Architecture:** `Architecture.md` (C4 model, feature outcomes, build status — updated after every block)
-**Last updated:** 2026-05-27 · Block 4 complete
+**Last updated:** 2026-05-27 · Block 5 complete — MVP feature-complete
 
 ---
 
@@ -44,8 +44,10 @@
 | `components/Uploader.tsx` (TUS upload + DB insert + Edge Function dispatch) | ✅ |
 | `components/ui/button.tsx` | ✅ |
 | `App.tsx` (route shell: list / new / detail views) | ✅ |
-| Edge Function code | ⏳ Block 4 |
-| `MeetingList`, `MeetingDetail`, `ui/tabs`, `ui/card` | ⏳ Block 5 |
+| Edge Function code | ✅ deployed to Supabase |
+| `MeetingList`, `MeetingDetail`, `ui/tabs`, `ui/card` | ✅ Block 5 complete |
+| `README.md` (final) | ✅ |
+| `xlsx` → `exceljs` migration + security fixes | ✅ 0 npm audit vulnerabilities |
 
 ---
 
@@ -81,24 +83,22 @@ Added `Architecture.md` with C4 model (Context, Container, Component levels), se
 
 ### ~~Block 3 — JSON Schema + lib plumbing~~ ✅ Done
 
+### ~~Block 2 — Auth + Capture UI~~ ✅ Done
+### ~~Block 3 — JSON Schema + lib plumbing~~ ✅ Done
 ### ~~Block 4 — Edge Function~~ ✅ Done (deployed to Supabase)
+### ~~Block 5 — Results UI + exports~~ ✅ Done
 
-### Block 4 — Edge Function [01:10–01:35]
+**All five blocks complete.** The MVP is feature-complete.
 
-- `supabase/functions/_shared/cors.ts`
-- `supabase/functions/process-meeting/index.ts`
-- `supabase/functions/process-meeting/deepgram.ts`
-- `supabase/functions/process-meeting/llm.ts`
-- Run: `supabase functions deploy process-meeting`
+### End-to-end smoke test (next task)
 
-### Block 5 — Results UI + exports [01:35–02:00]
-
-- `web/src/components/MeetingList.tsx`
-- `web/src/components/MeetingDetail.tsx` (3 tabs + Realtime)
-- `web/src/components/ui/tabs.tsx`
-- `web/src/components/ui/card.tsx`
-- `README.md` (final)
-- End-to-end smoke test
+1. `cd web && npm run dev`
+2. Sign in via magic-link
+3. Upload a short audio file (or record via mic)
+4. Watch status badges update: pending → transcribing → analysing → done
+5. Verify Minutes / Jira / Diagrams tabs render correctly
+6. Click "Export .xlsx" and verify the file opens in Excel / LibreOffice
+7. Verify a failed meeting (delete the audio mid-flight) shows the error state
 
 ---
 
@@ -140,7 +140,7 @@ Added `Architecture.md` with C4 model (Context, Container, Component levels), se
 - Backend: Supabase (Postgres + Storage + Edge Functions on Deno)
 - Transcription: Deepgram Nova-2 only
 - LLM: OpenAI `gpt-4o-mini` with `response_format: { type: "json_schema", strict: true }`
-- Excel: SheetJS (`xlsx`) client-side
+- Excel: ExcelJS (`exceljs`) client-side — replaced SheetJS which had unfixed CVEs
 - Diagrams: `mermaid` v10 browser-side
 
 **What is explicitly banned (PRD §0):** Next.js, server actions, custom queueing, Redis, Lambda, `service_role` on client, any non-Supabase auth.

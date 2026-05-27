@@ -22,9 +22,11 @@
  */
 
 import { useState, useEffect } from 'react'
-import { supabase } from './lib/supabase'       // Supabase client for auth state
-import { AuthGate } from './components/AuthGate' // blocks unauthenticated access
-import { Uploader } from './components/Uploader' // handles audio upload + dispatch
+import { supabase } from './lib/supabase'             // Supabase client for auth state
+import { AuthGate } from './components/AuthGate'       // blocks unauthenticated access
+import { Uploader } from './components/Uploader'       // handles audio upload + dispatch
+import { MeetingList } from './components/MeetingList'     // list of past meetings
+import { MeetingDetail } from './components/MeetingDetail' // results view for one meeting
 
 // View describes which screen the user is currently looking at.
 // TypeScript discriminated unions like this make it easy to handle each view safely.
@@ -91,10 +93,11 @@ export default function App() {
                   + New meeting
                 </button>
               </div>
-              {/* MeetingList will be wired in Block 5 — shows past meetings */}
-              <p className="text-sm text-gray-400">
-                No meetings yet — record or upload one to get started.
-              </p>
+              {/* MeetingList fetches and streams the user's meetings from Supabase */}
+              <MeetingList
+                userId={userId}
+                onSelect={(meetingId) => setView({ type: 'detail', meetingId })}
+              />
             </div>
           )}
 
@@ -127,12 +130,9 @@ export default function App() {
                 >
                   ← Back
                 </button>
-                <h2 className="text-lg font-semibold text-gray-900">Meeting results</h2>
               </div>
-              {/* MeetingDetail will be wired in Block 5 — shows Minutes, Jira, Diagrams tabs */}
-              <p className="text-sm text-gray-500">
-                Meeting <code className="font-mono text-xs">{view.meetingId}</code> is processing…
-              </p>
+              {/* MeetingDetail shows Minutes, Jira, and Diagrams tabs with Realtime updates */}
+              <MeetingDetail meetingId={view.meetingId} />
             </div>
           )}
 

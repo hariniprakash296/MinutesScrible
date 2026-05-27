@@ -1,7 +1,7 @@
 # MeetAssist — Architecture
 
 > **Living document.** Updated after every build block and session.
-> Last updated: 2026-05-27 · Block 4 complete.
+> Last updated: 2026-05-27 · Block 5 complete — MVP feature-complete.
 
 ---
 
@@ -102,7 +102,7 @@ src/
 ├── lib/
 │   ├── supabase.ts       Single supabase-js client (anon key only)
 │   ├── types.ts          Zod schemas + TS types mirroring §3.2 of PRD
-│   ├── jiraExport.ts     SheetJS download — sanitizeCell() on every LLM string
+│   ├── jiraExport.ts     ExcelJS .xlsx download — sanitizeCell() + formula-injection protection
 │   └── mermaidRender.ts  mermaid.parse() + safe render + fallback diagram
 └── components/
     ├── AuthGate.tsx       Magic-link form; shows children only when session exists
@@ -263,8 +263,9 @@ meetings_user_id_created_at_idx  (user_id, created_at DESC)
 | RLS on `meeting-audio` storage | Path prefix `(storage.foldername(name))[1]` must equal `auth.uid()::text` |
 | Signed URLs are 300s TTL | Generated server-side in Edge Function, never logged, never sent to analytics |
 | No transcript logging | Logs contain only `meeting_id` + `status` |
-| SheetJS `sanitizeCell()` | Strips newlines and ASCII control chars from every LLM string before writing to `.xlsx` |
+| ExcelJS `sanitizeCell()` | Strips newlines and ASCII control chars from every LLM string before writing to `.xlsx`. Also prefixes formula-trigger chars (`=+-@\|`) with `'` (OWASP CSV Injection mitigation). |
 | `Issue Type` hardcoded to `"Story"` | Never sourced from LLM output in `jiraExport.ts` |
+| Mermaid `securityLevel: strict` | Prevents SVG diagrams from executing JavaScript in the browser |
 
 ---
 
@@ -292,7 +293,8 @@ Tracks which blocks from the PRD §5 execution timeline are complete.
 | **Block 2** | Auth + Capture UI (`AuthGate`, `Recorder`, `Uploader`) | ✅ Done | `lib/supabase.ts`, `components/AuthGate.tsx`, `components/Recorder.tsx`, `components/Uploader.tsx`, `components/ui/button.tsx`, `App.tsx` |
 | **Block 3** | JSON schema, LLM types, SheetJS, Mermaid plumbing | ✅ Done | `lib/types.ts`, `lib/jiraExport.ts`, `lib/mermaidRender.ts`, `functions/process-meeting/schema.ts` |
 | **Block 4** | Edge Function async pipeline | ✅ Done | `functions/_shared/cors.ts`, `functions/process-meeting/index.ts`, `functions/process-meeting/deepgram.ts`, `functions/process-meeting/llm.ts` — deployed to Supabase |
-| **Block 5** | Results UI, Realtime, exports | ⬜ Pending | — |
+| **Block 5** | Results UI, Realtime, exports | ✅ Done | `components/MeetingList.tsx`, `components/MeetingDetail.tsx`, `components/ui/tabs.tsx`, `components/ui/card.tsx`, `README.md`, `App.tsx` wired |
+| **Security** | xlsx→exceljs migration, ESLint fixes, formula injection protection, lib/audio.ts extraction | ✅ Done | `lib/audio.ts` (new), `lib/jiraExport.ts` (exceljs), `components/Recorder.tsx`, `components/Uploader.tsx` |
 
 ---
 
