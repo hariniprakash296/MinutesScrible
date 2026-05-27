@@ -1,7 +1,7 @@
 # MeetAssist — Architecture
 
 > **Living document.** Updated after every build block and session.
-> Last updated: 2026-05-27 · Block 1 complete.
+> Last updated: 2026-05-27 · Block 2 complete.
 
 ---
 
@@ -289,7 +289,7 @@ Tracks which blocks from the PRD §5 execution timeline are complete.
 |---|---|---|---|
 | **Pre-Block 1** | Supabase CLI install, login, link, secrets | ✅ Done | — |
 | **Block 1** | Foundations: Vite scaffold, deps, Tailwind, migration, env | ✅ Done | `web/` scaffold, `tailwind.config.js`, `postcss.config.js`, `web/src/index.css`, `web/.env.local`, `web/.env.example`, `supabase/migrations/0001_init.sql` |
-| **Block 2** | Auth + Capture UI (`AuthGate`, `Recorder`, `Uploader`) | ⏳ Next | — |
+| **Block 2** | Auth + Capture UI (`AuthGate`, `Recorder`, `Uploader`) | ✅ Done | `lib/supabase.ts`, `components/AuthGate.tsx`, `components/Recorder.tsx`, `components/Uploader.tsx`, `components/ui/button.tsx`, `App.tsx` |
 | **Block 3** | JSON schema, LLM types, SheetJS, Mermaid plumbing | ⬜ Pending | — |
 | **Block 4** | Edge Function async pipeline | ⬜ Pending | — |
 | **Block 5** | Results UI, Realtime, exports | ⬜ Pending | — |

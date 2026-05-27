@@ -5,7 +5,7 @@
 **Local path:** `C:\Users\harin\Documents\MeetAssist`
 **PRD:** `PRD_MeetAssist.md` (single source of truth — read it before touching anything)
 **Architecture:** `Architecture.md` (C4 model, feature outcomes, build status — updated after every block)
-**Last updated:** 2026-05-27 · Block 1 complete
+**Last updated:** 2026-05-27 · Block 2 complete
 
 ---
 
@@ -38,8 +38,14 @@
 | `meeting-audio` storage bucket | ✅ created via migration |
 | Realtime enabled on `meetings` | ✅ |
 | `web/.env.local` | ✅ anon key + URL set |
+| `web/src/lib/supabase.ts` | ✅ |
+| `components/AuthGate.tsx` (magic-link sign-in + session guard) | ✅ |
+| `components/Recorder.tsx` (MediaRecorder + MIME negotiation) | ✅ |
+| `components/Uploader.tsx` (TUS upload + DB insert + Edge Function dispatch) | ✅ |
+| `components/ui/button.tsx` | ✅ |
+| `App.tsx` (route shell: list / new / detail views) | ✅ |
 | Edge Function code | ⏳ Block 4 |
-| Frontend components | ⏳ Blocks 2–5 |
+| `MeetingList`, `MeetingDetail`, `ui/tabs`, `ui/card` | ⏳ Block 5 |
 
 ---
 
@@ -71,18 +77,7 @@ Added `Architecture.md` with C4 model (Context, Container, Component levels), se
 
 ## Next Steps
 
-### Block 2 — Auth + Capture UI [00:20–00:50]
-
-Files to write:
-- `web/src/lib/supabase.ts` — single supabase-js client
-- `web/src/components/AuthGate.tsx` — magic-link form, session guard
-- `web/src/components/Recorder.tsx` — MediaRecorder, MIME negotiation (webm → mp4 for Safari)
-- `web/src/components/ui/button.tsx` — shadcn-style primitive
-- `web/src/App.tsx` — route shell wiring AuthGate + MeetingList + MeetingDetail
-- `web/src/components/Uploader.tsx` — TUS resumable upload → DB insert → POST to Edge Function
-- Update `web/src/main.tsx` to import index.css
-
-After Block 2: auth flow works, audio capture works, upload to storage works, meetings row created.
+### ~~Block 2 — Auth + Capture UI~~ ✅ Done
 
 ### Block 3 — JSON Schema + lib plumbing [00:50–01:10]
 
