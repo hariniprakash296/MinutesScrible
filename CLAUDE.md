@@ -5,7 +5,7 @@
 **Local path:** `C:\Users\harin\Documents\MeetAssist`
 **PRD:** `PRD_MeetAssist.md` (single source of truth — read it before touching anything)
 **Architecture:** `Architecture.md` (C4 model, feature outcomes, build status — updated after every block)
-**Last updated:** 2026-05-27 · Block 3 complete
+**Last updated:** 2026-05-27 · Block 4 complete
 
 ---
 
@@ -80,6 +80,8 @@ Added `Architecture.md` with C4 model (Context, Container, Component levels), se
 ### ~~Block 2 — Auth + Capture UI~~ ✅ Done
 
 ### ~~Block 3 — JSON Schema + lib plumbing~~ ✅ Done
+
+### ~~Block 4 — Edge Function~~ ✅ Done (deployed to Supabase)
 
 ### Block 4 — Edge Function [01:10–01:35]
 
