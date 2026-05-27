@@ -5,7 +5,7 @@
 **Local path:** `C:\Users\harin\Documents\MeetAssist`
 **PRD:** `PRD_MeetAssist.md` (single source of truth — read it before touching anything)
 **Architecture:** `Architecture.md` (C4 model, feature outcomes, build status — updated after every block)
-**Last updated:** 2026-05-27 · Block 2 complete
+**Last updated:** 2026-05-27 · Block 3 complete
 
 ---
 
@@ -79,12 +79,7 @@ Added `Architecture.md` with C4 model (Context, Container, Component levels), se
 
 ### ~~Block 2 — Auth + Capture UI~~ ✅ Done
 
-### Block 3 — JSON Schema + lib plumbing [00:50–01:10]
-
-- `web/src/lib/types.ts` — Zod + TS types mirroring PRD §3.2
-- `web/src/lib/jiraExport.ts` — SheetJS with `sanitizeCell()`
-- `web/src/lib/mermaidRender.ts` — `mermaid.parse()` + fallback
-- `supabase/functions/process-meeting/schema.ts` — JSON schema literal (single source of truth)
+### ~~Block 3 — JSON Schema + lib plumbing~~ ✅ Done
 
 ### Block 4 — Edge Function [01:10–01:35]
 
