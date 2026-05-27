@@ -19,11 +19,11 @@
  * in the background — the user never waits for AI here.
  */
 
-import { useState, useCallback } from 'react'
-import { v4 as uuidv4 } from 'uuid'          // generates random unique IDs
-import { supabase } from '../lib/supabase'    // our Supabase client
-import { Recorder, mimeToExtension } from './Recorder' // in-browser recorder component
-import { Button } from './ui/button'
+import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'              // generates random unique IDs
+import { supabase } from '../lib/supabase'        // our Supabase client
+import { mimeToExtension } from '../lib/audio'    // audio format utilities
+import { Recorder } from './Recorder'             // in-browser recorder component
 
 // List of audio MIME types we accept. Other types are rejected with an error.
 // We check against the base type (before the semicolon) so "audio/webm;codecs=opus"
@@ -176,12 +176,12 @@ export function Uploader({ userId, onUploaded }: UploaderProps) {
    * Called when the user drops a file onto the drop zone.
    * useCallback memoises the function to avoid recreating it on every render.
    */
-  const onDrop = useCallback((e: React.DragEvent) => {
+  function onDrop(e: React.DragEvent) {
     e.preventDefault()      // prevent the browser from opening the file directly
     setDragging(false)
     const file = e.dataTransfer.files[0] // only handle the first dropped file
     if (file) handleFile(file)
-  }, [userId]) // recreate if userId changes (in practice it never does after login)
+  }
 
   /**
    * onFileInput
@@ -235,7 +235,7 @@ export function Uploader({ userId, onUploaded }: UploaderProps) {
               type="file"
               accept="audio/webm,audio/mp4,audio/mpeg,audio/wav,audio/x-m4a" // filter shown file types
               onChange={onFileInput}
-              className="sr-only" {/* visually hidden but still accessible */}
+              className="sr-only" /* sr-only hides the input visually but keeps it accessible */
             />
           </label>
         </p>

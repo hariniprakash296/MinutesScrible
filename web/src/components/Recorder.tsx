@@ -10,52 +10,21 @@
  * Different browsers support different audio formats:
  *   - Chrome/Firefox: prefer "audio/webm;codecs=opus" (excellent quality)
  *   - Safari (iOS/macOS): only supports "audio/mp4"
- * getSupportedMimeType() tests each format in order and picks the first one
- * the current browser supports, so recording works on all major browsers.
+ * getSupportedMimeType() (in lib/audio.ts) tests each format in order and
+ * picks the first one the current browser supports.
  *
  * The Blob produced here is passed to the Uploader component, which uploads
  * it to Supabase Storage and triggers AI processing.
  */
 
 import { useState, useRef } from 'react'
+import { getSupportedMimeType } from '../lib/audio' // audio utilities (kept in lib/ for HMR compatibility)
 import { Button } from './ui/button'
 
 // RecorderProps defines what the parent component must provide.
 interface RecorderProps {
   // Called when recording is stopped — passes the audio data and its MIME type.
   onRecordingComplete: (blob: Blob, mimeType: string) => void
-}
-
-/**
- * getSupportedMimeType
- *
- * Tries a list of audio formats in order of preference and returns the first
- * one the browser supports. Falls back to an empty string if none match,
- * in which case the browser uses its own default format.
- */
-function getSupportedMimeType(): string {
-  const types = [
-    'audio/webm;codecs=opus', // best quality, supported by Chrome and Firefox
-    'audio/webm',             // fallback webm without specifying codec
-    'audio/mp4',              // Safari's format
-    'audio/ogg;codecs=opus',  // older Firefox fallback
-  ]
-  for (const type of types) {
-    if (MediaRecorder.isTypeSupported(type)) return type // return the first supported type
-  }
-  return '' // no match — let the browser decide
-}
-
-/**
- * mimeToExtension
- *
- * Converts a MIME type string to a file extension.
- * Used when naming the uploaded file (e.g. "recording.mp4").
- */
-function mimeToExtension(mime: string): string {
-  if (mime.includes('mp4')) return 'mp4'
-  if (mime.includes('ogg')) return 'ogg'
-  return 'webm' // default
 }
 
 // RecordState tracks what the recorder is currently doing.
@@ -122,7 +91,6 @@ export function Recorder({ onRecordingComplete }: RecorderProps) {
     }
 
     // Start recording, emitting a data chunk every 250 milliseconds.
-    // Smaller intervals mean less data is lost if the browser crashes.
     recorder.start(250)
     setState('recording')
 
@@ -160,8 +128,8 @@ export function Recorder({ onRecordingComplete }: RecorderProps) {
       {/* Show the timer with a pulsing red dot while recording */}
       {state === 'recording' && (
         <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-red-500" /> {/* blinking dot */}
-          <span className="font-mono text-sm text-gray-600">{mm}:{ss}</span>     {/* elapsed time */}
+          <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-red-500" />
+          <span className="font-mono text-sm text-gray-600">{mm}:{ss}</span>
         </div>
       )}
 
@@ -169,15 +137,12 @@ export function Recorder({ onRecordingComplete }: RecorderProps) {
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <div className="flex gap-2">
-        {/* Show Start button when idle */}
         {state === 'idle' && (
           <Button onClick={startRecording}>Start recording</Button>
         )}
-        {/* Show Stop button while recording */}
         {state === 'recording' && (
           <Button variant="destructive" onClick={stopRecording}>Stop</Button>
         )}
-        {/* Show completion message and Reset option after stopping */}
         {state === 'stopped' && (
           <>
             <span className="text-sm text-gray-500">Recording complete ({mm}:{ss})</span>
@@ -189,5 +154,3 @@ export function Recorder({ onRecordingComplete }: RecorderProps) {
   )
 }
 
-// Export the helper so Uploader.tsx can use it to determine the file extension.
-export { mimeToExtension }
